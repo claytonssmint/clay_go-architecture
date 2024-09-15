@@ -33,6 +33,9 @@ func (o *Order) IsValid() error {
 	if o.Product == "" {
 		return errors.New("invalid order product")
 	}
+	if o.Description == "" {
+		return errors.New("invalid order description")
+	}
 	if o.Price <= 0 {
 		return errors.New("invalid order price")
 	}
