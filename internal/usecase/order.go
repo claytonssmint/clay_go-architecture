@@ -5,7 +5,8 @@ import (
 )
 
 type UseCasePort interface {
-	Apply(input OrderInputDTO) (OrderOutputDTO, error)
+	CreateUseCase(input OrderInputDTO) (OrderOutputDTO, error)
+	FindByIDUseCase(id string) (OrderOutputDTO, error)
 }
 
 type OrderInputDTO struct {
@@ -35,7 +36,7 @@ func NewCreateOrderUseCase(orderRepository entity.OrderRepositoryInterface) UseC
 	}
 }
 
-func (u *CreateOrderUseCase) Apply(input OrderInputDTO) (OrderOutputDTO, error) {
+func (u *CreateOrderUseCase) CreateUseCase(input OrderInputDTO) (OrderOutputDTO, error) {
 	order := entity.Order{
 		ID:          input.ID,
 		Product:     input.Product,
@@ -45,6 +46,22 @@ func (u *CreateOrderUseCase) Apply(input OrderInputDTO) (OrderOutputDTO, error) 
 	}
 	order.CalculateTotalPrice()
 	if err := u.OrderRepository.Save(&order); err != nil {
+		return OrderOutputDTO{}, err
+	}
+	outputDTO := OrderOutputDTO{
+		ID:          order.ID,
+		Product:     order.Product,
+		Description: order.Description,
+		Price:       order.Price,
+		Tax:         order.Tax,
+		TotalPrice:  order.TotalPrice,
+	}
+	return outputDTO, nil
+}
+
+func (u *CreateOrderUseCase) FindByIDUseCase(id string) (OrderOutputDTO, error) {
+	order, err := u.OrderRepository.FindByID(id)
+	if err != nil {
 		return OrderOutputDTO{}, err
 	}
 	outputDTO := OrderOutputDTO{

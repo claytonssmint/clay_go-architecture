@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS orders_db (
+CREATE TABLE IF NOT EXISTS produtos (
     id VARCHAR(255) PRIMARY KEY,
     product VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
@@ -6,3 +6,9 @@ CREATE TABLE IF NOT EXISTS orders_db (
     tax FLOAT NOT NULL,
     total_price FLOAT NOT NULL
     );
+
+SHOW DATABASES;
+SHOW TABLES;
+USE pedidos_db;
+DESCRIBE produtos;
+SELECT * FROM produtos;

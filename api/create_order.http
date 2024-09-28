@@ -10,3 +10,19 @@ Content-Type: application/json
   "price": 10.99,
   "tax": 0.5
 }
+
+### Criar Order
+POST http://localhost:8000/order HTTP/1.1
+Host: localhost:8000
+Content-Type: application/json
+
+{
+  "product": "Sprite",
+  "description": "Refrigerante de limão",
+  "price": 8.99,
+  "tax": 0.2
+}
+
+### Trazer Order por ID
+GET http://localhost:8000/order/1 HTTP/1.1
+Host: localhost:8000
