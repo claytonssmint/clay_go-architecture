@@ -19,7 +19,7 @@ func (suite *OrderRepositoryTestSuite) SetupSuite() {
 	db, err := sql.Open("sqlite3", ":memory:")
 	suite.NoError(err)
 
-	_, err = db.Exec(`CREATE TABLE orders (
+	_, err = db.Exec(`CREATE TABLE produtos (
 		id varchar(255) NOT NULL, 
 		product VARCHAR(255) NOT NULL, 
 		description TEXT NOT NULL, 
@@ -50,7 +50,7 @@ func (suite *OrderRepositoryTestSuite) TestOrderRepository_SaveSucess() {
 	suite.NoError(err)
 
 	var orderResult entity.Order
-	err = suite.Db.QueryRow("SELECT id, product, description, price, tax, total_price FROM orders WHERE id = ?", order.ID).
+	err = suite.Db.QueryRow("SELECT id, product, description, price, tax, total_price FROM produtos WHERE id = ?", order.ID).
 		Scan(&orderResult.ID, &orderResult.Product, &orderResult.Description, &orderResult.Price, &orderResult.Tax, &orderResult.TotalPrice)
 	suite.NoError(err)
 
@@ -73,4 +73,32 @@ func (suite *OrderRepositoryTestSuite) TestOrderRepository_SaveError() {
 
 	err = repo.Save(order)
 	suite.Error(err)
+}
+
+func (suite *OrderRepositoryTestSuite) TestOrderRepository_FindByIDSucess() {
+	order, err := entity.NewOrder("3", "Product 1", "Description 1", 10.0, 1.0)
+	suite.NoError(err)
+	suite.NoError(order.CalculateTotalPrice())
+
+	repo := NewOrderRepository(suite.Db)
+	err = repo.Save(order)
+	suite.NoError(err)
+
+	orderResult, err := repo.FindByID(order.ID)
+	suite.NoError(err)
+
+	suite.Equal(order.ID, orderResult.ID)
+	suite.Equal(order.Product, orderResult.Product)
+	suite.Equal(order.Description, orderResult.Description)
+	suite.Equal(order.Price, orderResult.Price)
+	suite.Equal(order.Tax, orderResult.Tax)
+	suite.Equal(order.TotalPrice, orderResult.TotalPrice)
+}
+
+func (suite *OrderRepositoryTestSuite) TestOrderRepository_FindByIDError() {
+	repo := NewOrderRepository(suite.Db)
+
+	order, err := repo.FindByID("4")
+	suite.Error(err)
+	suite.Nil(order)
 }

@@ -4,9 +4,8 @@ Host: localhost:8000
 Content-Type: application/json
 
 {
-  "id":"1",
-    "product": "Coca-Cola",
-    "description": "Refrigerante de cola",
+  "product": "Coca-Cola",
+  "description": "Refrigerante de cola",
   "price": 10.99,
   "tax": 0.5
 }
@@ -24,5 +23,5 @@ Content-Type: application/json
 }
 
 ### Trazer Order por ID
-GET http://localhost:8000/order/1 HTTP/1.1
+GET http://localhost:8000/order/6257591e-5f82-45ba-a389-f2cf5d773c47 HTTP/1.1
 Host: localhost:8000

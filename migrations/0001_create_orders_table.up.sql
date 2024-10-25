@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS produtos (
     );
 
 SHOW DATABASES;
+CREATE DATABASE IF NOT EXISTS pedidos_db;
 SHOW TABLES;
 USE pedidos_db;
 DESCRIBE produtos;
